@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.group_tricks) }}
+    {{ form_row(form.images) }}
+
+    {{ form_row(form.submit, { 'label': 'Envoyer' }) }}
+    {{ form_end(form) }}
+{% endblock %}
