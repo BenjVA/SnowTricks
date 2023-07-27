@@ -5,13 +5,17 @@ namespace App\Controller;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends AbstractController
+class LoginController extends AbstractController
 {
-    #[Route('/users', name: 'create_user')]
-    public function createUser(EntityManagerInterface $entityManager): Response
+    #[Route('/users', name: 'login_user')]
+    public function loginUser(
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
+    ): Response
     {
         $user = new Users();
         $user->setUsername('User1');
