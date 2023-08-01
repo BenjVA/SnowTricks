@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ImagesRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: ImagesRepository::class)]
+class Images
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tricks $tricks = null;
+
+    #[ORM\Column(type: Types::BLOB)]
+    #[Assert\Image(
+        minWidth: 200,
+        maxWidth: 1920,
+        maxHeight: 1580,
+        minHeight: 200,
+    )]
+    private $file = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTricks(): ?Tricks
+    {
+        return $this->tricks;
+    }
+
+    public function setTricks(?Tricks $tricks): static
+    {
+        $this->tricks = $tricks;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile($file): static
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+}
