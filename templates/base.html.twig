@@ -17,7 +17,7 @@
     <body class="container">
         <nav class="navbar navbar-expand-lg sticky-top navbar-light lightgray my-3">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">Snowtricks</a>
+                <a class="navbar-brand" href="{{ path('app_homepage') }}">Snowtricks</a>
                 <button
                         class="navbar-toggler"
                         type="button"
@@ -31,7 +31,7 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-2 py-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="/">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_homepage') }}">
                                 Accueil
                             </a>
                         </li>
@@ -46,8 +46,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="#">
-                                Sign up
+                            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_login') }}">
+                                Log in
                             </a>
                         </li>
                     </ul>
@@ -55,7 +55,7 @@
             </div>
         </nav>
         {% for message in app.flashes('success') %}
-            <div class="flash-success">{{ message }}</div>
+            <div class="flash-success alert-success text-center">{{ message }}</div>
         {% endfor %}
             {% block body %}{% endblock %}
         <footer class="border-top">
