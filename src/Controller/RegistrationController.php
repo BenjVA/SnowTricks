@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +35,8 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SendMailService $mail,
     ): Response
     {
         $user = new Users();
@@ -53,15 +55,24 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
+            /*// generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('snowtricks@pro-blog.fr', 'Snowtricks Mail Bot'))
                     ->to(new Address($user->getUserIdentifier()))
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            );*/
             // do anything else you need here, like send an email
+            $mail->send(
+                'snowtricks@pro-blog.fr',
+                $user->getUserIdentifier(),
+                'Activation de votre compte sur Snowtricks',
+                'confirmation_email',
+                [
+                    'user' => $user
+                ]
+            );
             $this->addFlash('success', 'A confirmation email has been sent.');
 
             return $this->redirectToRoute('app_homepage');

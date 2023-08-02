@@ -62,8 +62,15 @@
                 </div>
             </div>
         </nav>
-        {% for message in app.flashes('success') %}
-            <div class="flash-success alert-success text-center">{{ message }}</div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message|raw }}
+                    </div>
+                </div>
+            {% endfor %}
         {% endfor %}
         {% block body %}{% endblock %}
         <footer class="border-top">
