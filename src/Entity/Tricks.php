@@ -29,15 +29,6 @@ class Tricks
     #[Assert\NotBlank]
     private ?string $groupTricks = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    #[Assert\Image(
-        minWidth: 200,
-        maxWidth: 1920,
-        maxHeight: 1580,
-        minHeight: 200,
-    )]
-    private $images = null;
-
     #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
     private Collection $comments;
 
@@ -45,9 +36,13 @@ class Tricks
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,18 +86,6 @@ class Tricks
         return $this;
     }
 
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    public function setImages($images): static
-    {
-        $this->images = $images;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Comments>
      */
@@ -141,6 +124,36 @@ class Tricks
     public function setUsers(?Users $users): static
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTricks() === $this) {
+                $image->setTricks(null);
+            }
+        }
 
         return $this;
     }
