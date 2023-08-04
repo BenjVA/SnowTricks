@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
-use App\Security\EmailVerifier;
+use App\Repository\UsersRepository;
+use App\Service\JWTService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -21,22 +22,13 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
-    {
-        $this->emailVerifier = $emailVerifier;
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     */
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         SendMailService $mail,
+        JWTService $jwt,
     ): Response
     {
         $user = new Users();
@@ -55,25 +47,31 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            /*// generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('snowtricks@pro-blog.fr', 'Snowtricks Mail Bot'))
-                    ->to(new Address($user->getUserIdentifier()))
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );*/
             // do anything else you need here, like send an email
+
+            //Generate jwt token
+            $header = [
+                'alg' => 'HS256',
+                'typ' => 'JWT'
+            ];
+
+            $payload = [
+                'user_id' => $user->getUserIdentifier()
+            ];
+
+            $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+
             $mail->send(
                 'snowtricks@pro-blog.fr',
                 $user->getUserIdentifier(),
                 'Activation de votre compte sur Snowtricks',
                 'confirmation_email',
                 [
-                    'user' => $user
+                    'user' => $user,
+                    'token' => $token
                 ]
             );
-            $this->addFlash('success', 'A confirmation email has been sent.');
+            $this->addFlash('success', 'Un email de confirmation a été envoyé.');
 
             return $this->redirectToRoute('app_homepage');
         }
@@ -83,23 +81,30 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    #[Route('/verify/{token}', name: 'app_verify_email')]
+    public function verifyUserEmail($token,
+                                    JWTService $jwt,
+                                    UsersRepository $usersRepository,
+                                    EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($jwt->isValid($token)
+            && !$jwt->isExpired($token)
+            && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
 
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $payload = $jwt->getPayload($token);
 
-            return $this->redirectToRoute('app_register');
+            $user = $usersRepository->find($payload['user_id']);
+
+            if ($user && !$user->getIsVerified()) {
+                $user->setIsVerified(true);
+                $entityManager->flush($user);
+                $this->addFlash('success', 'Vous avez bien activé votre compte !');
+
+                return $this->redirectToRoute('app_homepage');
+            }
         }
+        $this->addFlash('danger', 'Le token est invalide ou a expiré');
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
-
-        return $this->redirectToRoute('app_homepage');
+        return $this->redirectToRoute('app_login');
     }
 }

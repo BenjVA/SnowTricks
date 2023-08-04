@@ -1,11 +1,6 @@
-<h1>Hi! Please confirm your email!</h1>
+<h1>Bonjour ! Veuillez activer votre compte en cliquant sur le lien ci-dessous</h1>
 
 <p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
-
-<p>
-    Cheers!
+    <a href="{{ absolute_url(path('app_verify_email', {token: token})) }}">Lien</a>.
+    <p>Ce lien expirera dans 3 heures</p>
 </p>
