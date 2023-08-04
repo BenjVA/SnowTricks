@@ -33,7 +33,6 @@ class JWTService
 
         //Signature components
         $secret = base64_encode($secret);
-
         $signature = hash_hmac('sha256', $base64Header .'.'. $base64Payload, $secret, true);
         $base64Signature = base64_encode($signature);
 
@@ -47,7 +46,7 @@ class JWTService
     public function isValid(string $token): bool
     {
         return preg_match(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
+            '/^[a-zA-Z0-9\-_=]+\.[a-zA-Z0-9\-_=]+\.[a-zA-Z0-9\-_=]+$/',
                 $token
         ) === 1;
     }
@@ -79,7 +78,7 @@ class JWTService
         return $payload['exp'] < $now->getTimestamp();
     }
 
-    public function check(string $token, string $secret): bool
+    public function checkTokenSignature(string $token, string $secret): bool
     {
         $header = $this->getHeader($token);
         $payload = $this->getPayload($token);
