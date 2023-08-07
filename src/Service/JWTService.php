@@ -14,7 +14,6 @@ class JWTService
     ): string
     {
         if ($validity > 0) {
-            //Custom error possible
             $now = new DateTimeImmutable();
             $expiration = $now->getTimeStamp() + $validity;
 
@@ -27,7 +26,7 @@ class JWTService
         $base64Header = base64_encode(json_encode($header));
         $base64Payload = base64_encode(json_encode($payload));
 
-        //Remove + and = signs in encoding
+        //Remove + and / signs in encoding
         $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], $base64Header);
         $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], $base64Payload);
 

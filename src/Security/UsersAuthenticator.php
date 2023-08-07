@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,33 +22,26 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function authenticate(Request $request): Passport
     {
-        $email = $request->request->get('email', '');
+        $mail = $request->request->get('mail', '');
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $request->getSession()->set(Security::LAST_USERNAME, $mail);
 
         return new Passport(
-            new UserBadge($email),
+            new UserBadge($mail),
             new PasswordCredentials($request->request->get('password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-            ]
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),            ]
         );
     }
 
     /**
-     * @inheritDoc
+     * @throws Exception
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
@@ -55,12 +49,11 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        // For example:
         return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
+        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

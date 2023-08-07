@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -19,12 +20,12 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('mail', EmailType::class)
-            ->add('username')
-            ->add('RgpdConsent', CheckboxType::class, [
+            ->add('username', TextType::class)
+            ->add('ConsentementRgpd', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Vous devez accepter nos conditions.',
+                        'message' => 'Vous devez accepter les termes RGPD.',
                     ]),
                 ],
             ])
