@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-#[UniqueEntity(fields: ['mail'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['mail'], message: 'Il existe déjà un compte avec cette adresse email.')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -198,12 +198,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->mail;
     }
 
-    public function isVerified(): bool
+    public function getIsVerified(): ?bool
     {
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
 

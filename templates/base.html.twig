@@ -40,21 +40,21 @@
                                 Tricks
                             </a>
                         </li>
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if app.user %}
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_logout') }}">
-                                Log out
+                                Déconnexion
                             </a>
                         </li>
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_register') }}">
-                                Sign in
+                                Inscription
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_login') }}">
-                                Log in
+                                Connexion
                             </a>
                         </li>
                         {% endif %}
@@ -62,8 +62,15 @@
                 </div>
             </div>
         </nav>
-        {% for message in app.flashes('success') %}
-            <div class="flash-success alert-success text-center">{{ message }}</div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="alert-message">
+                        {{ message|raw }}
+                    </div>
+                </div>
+            {% endfor %}
         {% endfor %}
         {% block body %}{% endblock %}
         <footer class="border-top">
