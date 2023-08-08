@@ -16,7 +16,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -29,8 +28,8 @@ class RegistrationController extends AbstractController
                              UserAuthenticatorInterface $userAuthenticator,
                              UsersAuthenticator $authenticator,
                              EntityManagerInterface $entityManager,
-                             SendMailService $mail,
-                             JWTService $jwt
+                             SendMailService $mailService,
+                             JWTService $JWTService
     ): Response
     {
         $user = new Users();
@@ -60,9 +59,9 @@ class RegistrationController extends AbstractController
                 'user_id' => $user->getId()
             ];
 
-            $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+            $token = $JWTService->generate($header, $payload, $this->getParameter('app.jwtsecret'));
 
-            $mail->send(
+            $mailService->send(
                 'snowtricks@pro-blog.fr',
                 $user->getUserIdentifier(),
                 'Activation de votre compte sur le site snowtricks',
@@ -87,21 +86,21 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/{token}', name: 'app_verify_email')]
-    public function verifyUserEmail($token,
-                                    JWTService $jwt,
+    public function verifyUserEmail(string $token,
+                                    JWTService $JWTService,
                                     UsersRepository $usersRepository,
-                                    EntityManagerInterface $em
+                                    EntityManagerInterface $entityManager
     ): Response
     {
-        if ($jwt->isValid($token)
-        && !$jwt->isExpired($token)
-        && $jwt->checkTokenSignature($token, $this->getParameter('app.jwtsecret'))) {
-            $payload = $jwt->getPayload($token);
+        if ($JWTService->isValid($token)
+        && !$JWTService->isExpired($token)
+        && $JWTService->checkTokenSignature($token, $this->getParameter('app.jwtsecret'))) {
+            $payload = $JWTService->getPayload($token);
             $user = $usersRepository->find($payload['user_id']);
 
             if ($user && !$user->getIsVerified()) {
                 $user->setIsVerified(true);
-                $em->flush($user);
+                $entityManager->flush($user);
                 $this->addFlash('success', 'Utilisateur activé!');
 
                 return $this->redirectToRoute('app_homepage');
@@ -116,8 +115,8 @@ class RegistrationController extends AbstractController
      * @throws TransportExceptionInterface
      */
     #[Route('/resendverification', name: 'app_resend_verif')]
-    public function resendVerificationMail(JWTService $jwt,
-                                           SendMailService $mail,
+    public function resendVerificationMail(JWTService $JWTService,
+                                           SendMailService $mailService,
                                            UsersRepository $usersRepository
     ): Response
     {
@@ -145,9 +144,9 @@ class RegistrationController extends AbstractController
             'user_id' => $user->getId()
         ];
 
-        $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+        $token = $JWTService->generate($header, $payload, $this->getParameter('app.jwtsecret'));
 
-        $mail->send(
+        $mailService->send(
             'snowtricks@pro-blog.fr',
             $user->getUserIdentifier(),
             'Activation de votre compte sur le site snowtricks',
