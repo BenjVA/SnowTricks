@@ -22,7 +22,9 @@
     >
 
     <button class="btn btn-lg btn-outline-dark my-2" type="submit">
-        Sign in
+        Connexion
     </button>
+    <a href="{{ path('app_register') }}" class="btn btn-secondary mt-1">M'inscrire</a>
+    <a href="{{ path('app_forgotten_password') }}" class="btn btn-secondary mt-1">Mot de passe oublié</a>
 </form>
 {% endblock %}
