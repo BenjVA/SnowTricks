@@ -6,6 +6,13 @@ use DateTimeImmutable;
 
 class JWTService
 {
+    /**
+     * @param array $header
+     * @param array $payload
+     * @param string $secret
+     * @param int $validity
+     * @return string
+     */
     public function generate(
         array $header,
         array $payload,
@@ -26,18 +33,18 @@ class JWTService
         $base64Header = base64_encode(json_encode($header));
         $base64Payload = base64_encode(json_encode($payload));
 
-        //Remove + and / signs in encoding
+        //Remove +, / and = signs in encoding
         $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], $base64Header);
         $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], $base64Payload);
 
         //Signature components
         $secret = base64_encode($secret);
-        $signature = hash_hmac('sha256', $base64Header .'.'. $base64Payload, $secret, true);
+        $signature = hash_hmac('sha256', $base64Header . '.' . $base64Payload, $secret, true);
         $base64Signature = base64_encode($signature);
 
         $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], $base64Signature);
 
-        $jwt = $base64Header .'.'. $base64Payload .'.'. $base64Signature;
+        $jwt = $base64Header . '.' . $base64Payload . '.' . $base64Signature;
 
         return $jwt;
     }
@@ -45,7 +52,7 @@ class JWTService
     public function isValid(string $token): bool
     {
         return preg_match(
-            '/^[a-zA-Z0-9\-_=]+\.[a-zA-Z0-9\-_=]+\.[a-zA-Z0-9\-_=]+$/',
+            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
                 $token
         ) === 1;
     }
