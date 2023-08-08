@@ -1,23 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ parent() }}
-    <img src="{{ asset('images/bigjump.jpg') }}" alt="snowboard jump" class="container-fluid">
-    <div id="arrow">
-        <a href="#tricks" class="h1"><i class="fas fa-arrow-circle-down text-light"></i></a>
-    </div>
-    <div class="text-center">
-        <h1 class="text-success">Site web communautaire dédié aux discussions autour des figures de snowboards</h1>
-        <h2 id="tricks">Voici tout les tricks</h2>
-    </div>
-    <div class="container-fluid text-center row-cols-xl-5 row-cols-lg-4 row-cols-md-3 mx-5 my-4">
-        <div class="card mx-auto" style="width: 18rem;">
-            <img src="{{ asset('images/defaultTricksImage.png') }}" class="card-img-top" alt="Tricks Header image">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
+<main class="container">
+    <section class="row">
+        <img src="{{ asset('images/bigjump.jpg') }}" alt="snowboard jump" class="container-fluid">
+        <div id="arrow">
+            <a href="#tricks" class="h1"><i class="fas fa-arrow-circle-down text-light"></i></a>
         </div>
-    </div>
+        <div class="text-center">
+            <h1>Site web communautaire dédié aux discussions autour des figures de snowboards</h1>
+            <h3 id="tricks">Voici tout les tricks</h3>
+        </div>
+        {% for trick in tricks %}
+            <div class="text-center col-4 mx-5 my-4">
+                <div class="card h-100" style="width: 18rem;">
+                    <img src="{{ asset('images/defaultTricksImage.png') }}" class="card-img-top" alt="Tricks Header image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trick.name }}</h5>
+                        <p class="card-text">{{ trick.description}}</p>
+                        <a href="#" class="btn btn-outline-dark">Détails</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+</main>
 {% endblock %}
