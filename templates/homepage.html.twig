@@ -12,13 +12,13 @@
             <h3 id="tricks">Voici tout les tricks</h3>
         </div>
         {% for trick in tricks %}
-            <div class="text-center col-4 mx-5 my-4">
+            <div class="text-center col-3 mx-5 my-4">
                 <div class="card h-100" style="width: 18rem;">
                     <img src="{{ asset('images/defaultTricksImage.png') }}" class="card-img-top" alt="Tricks Header image">
                     <div class="card-body">
                         <h5 class="card-title">{{ trick.name }}</h5>
                         <p class="card-text">{{ trick.description}}</p>
-                        <a href="#" class="btn btn-outline-dark">Détails</a>
+                        <a href="{{ path('app_tricks_details', {"slug": trick.slug}) }}" class="btn btn-outline-dark">Détails de la figure</a>
                     </div>
                 </div>
             </div>
