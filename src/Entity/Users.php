@@ -40,8 +40,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    #[ORM\Column(type: 'string', length: 155)]
-    private string $resetToken;
+    #[ORM\Column(type: 'string', length: 155, nullable: true)]
+    private ?string $resetToken;
 
     public function __construct()
     {
