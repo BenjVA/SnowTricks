@@ -11,9 +11,14 @@
             <div>
                 Images
             </div>
+                {% for videos in trick.videos %}
+                    <div class="embed-responsive embed-responsive-16by9 col-4">
+                        <iframe class="embed-responsive-item" src="{{ videos.url }}" allowfullscreen></iframe>
+                    </div>
+                {% endfor %}
             <div>
-                Catégorie: {{ trick.groupTricks }}
-                <p>{{ trick.description }}</p>
+                Catégorie: {{ trick.groupTricks|capitalize }}
+                <p>{{ trick.description|capitalize }}</p>
             </div>
         </section>
     </main>

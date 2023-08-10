@@ -18,5 +18,7 @@
         {{ form_row(registrationForm.ConsentementRgpd) }}
 
         <button type="submit" class="btn btn-lg btn-outline-dark">S'inscrire</button>
+    <a href="{{ path('app_login') }}" class="btn btn-secondary mt-1">Me connecter</a>
     {{ form_end(registrationForm) }}
+
 {% endblock %}
