@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une nouvelle figure{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12">
+                <h1>Ajout d'une nouvelle figure</h1>
+                {% include 'tricks/_form.html.twig' %}
+            </div>
+        </section>
+    </main>
+{% endblock %}

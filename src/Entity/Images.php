@@ -22,15 +22,6 @@ class Images
     #[ORM\JoinColumn(nullable: false)]
     private ?Tricks $tricks = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    #[Assert\Image(
-        minWidth: 200,
-        maxWidth: 1920,
-        maxHeight: 1580,
-        minHeight: 200,
-    )]
-    private $file = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -56,18 +47,6 @@ class Images
     public function setTricks(?Tricks $tricks): static
     {
         $this->tricks = $tricks;
-
-        return $this;
-    }
-
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    public function setFile($file): static
-    {
-        $this->file = $file;
 
         return $this;
     }
