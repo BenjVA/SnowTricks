@@ -39,10 +39,10 @@ class Tricks
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist'])]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist'])]
     private Collection $videos;
 
     public function __construct()

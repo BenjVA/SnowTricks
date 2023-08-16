@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
-            'success' => 'Vous êtes bien connecté'
+            'success' => 'Vous êtes bien connecté sur snowtricks !' ?? null
         ]);
     }
 
