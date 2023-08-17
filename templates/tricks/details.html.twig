@@ -35,6 +35,13 @@
                     </p>
                 </div>
             {% endif %}
+            {% for comment in comments %}
+                <div>
+                    <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                    par {{ comment.users.username }}</small>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% endfor %}
         </section>
     </main>
 {% endblock %}
