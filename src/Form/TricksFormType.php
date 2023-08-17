@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Tricks;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,10 +28,11 @@ class TricksFormType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('videos', TextareaType::class, [
-                'label' => 'Liens youtube à séparer par des virgules sans espaces si vous en rajoutez plusieurs.',
+            ->add('videos', CollectionType::class, [
+                'entry_type' => VideosFormType::class
+                /*'label' => 'Liens youtube à séparer par des virgules sans espaces si vous en rajoutez plusieurs.',
                 'mapped' => false,
-                'required' => false,
+                'required' => false,*/
             ])
         ;
     }
