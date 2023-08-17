@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
+use App\Repository\TricksRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
@@ -77,6 +78,18 @@ class TricksController extends AbstractController
         }
 
         return $this->render('tricks/add.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/edit/{slug}', name: 'edit')]
+    public function edit(Tricks $tricks, TricksRepository $tricksRepository): Response
+    {
+        $trick = $tricksRepository->find(1);
+
+        $form = $this->createForm(TricksFormType::class, $tricks);
+
+        return $this->render('tricks/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }
