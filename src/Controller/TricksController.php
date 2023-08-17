@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
+use App\Repository\CommentsRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,10 +20,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TricksController extends AbstractController
 {
     #[Route('/details/{slug}', name: 'details')]
-    public function tricksDetails(Tricks $trick): Response
+    public function tricksDetails(Tricks $trick, CommentsRepository $commentsRepository): Response
     {
+        $comments = $commentsRepository->findAll();
+
         return $this->render('tricks/details.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'comments' => $comments
         ]);
     }
 
