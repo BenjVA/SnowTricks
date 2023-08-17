@@ -22,6 +22,19 @@
                 Catégorie: {{ trick.groupTricks|capitalize }}
                 <p>{{ trick.description|capitalize }}</p>
             </div>
+            {% if app.user and app.user.isVerified == 1 %}
+                <h2>Commentaire</h2>
+                {{ render(path('app_comments_add', {'id' : trick.id})) }}
+            {% else %}
+                <div class="text-center">
+                    <p>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline-dark mb-1">Connectez-vous</a> pour pouvoir poster des commentaires !
+                    </p>
+                    <p>
+                        <a href="{{ path('app_register') }}" class="btn btn-outline-dark mb-1">Inscrivez-vous</a> si vous n'avez pas encore de compte
+                    </p>
+                </div>
+            {% endif %}
         </section>
     </main>
 {% endblock %}
