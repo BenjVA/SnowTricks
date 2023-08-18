@@ -56,15 +56,13 @@ class TricksController extends AbstractController
                 $img->setName($fichier);
                 $tricks->addImage($img);
             }
-
             $videos = $form->get('videos')->getData();
-            $urls = explode(',', $videos);
 
-            foreach ($urls as $url) {
-                $embedUrl = $urlToEmbedUrl->toEmbedUrl($url);
+            foreach ($videos as $video) {
+                $embedUrl = $urlToEmbedUrl->toEmbedUrl($video);
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
-                $tricks->addVideos($vid);
+                $tricks->addVideo($vid);
             }
 
             $slug = $slugger->slug(strtolower($tricks->getName()));
@@ -72,6 +70,7 @@ class TricksController extends AbstractController
 
             $user = $this->getUser();
             $tricks->setUsers($user);
+            dd($tricks);
 
             $entityManager->persist($tricks);
             $entityManager->flush();
@@ -87,14 +86,13 @@ class TricksController extends AbstractController
     }
 
     #[Route('/edit/{slug}', name: 'edit')]
-    public function edit(Tricks $tricks, TricksRepository $tricksRepository): Response
+    public function edit(Tricks $tricks): Response
     {
-        $trick = $tricksRepository->find(1);
-
         $form = $this->createForm(TricksFormType::class, $tricks);
 
         return $this->render('tricks/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'tricks' => $tricks
         ]);
     }
 }

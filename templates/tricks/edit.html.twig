@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Modification de {{ tricks.name }}{% endblock %}
+
 {% block body %}
+    <h1>Modifier {{ tricks.name }}</h1>
     {% include 'tricks/_form.html.twig' %}
 {% endblock %}
