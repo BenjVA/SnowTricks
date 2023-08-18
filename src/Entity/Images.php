@@ -18,8 +18,8 @@ class Images
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Tricks::class, cascade: ['persist'], inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false, onDelete: true)]
     private ?Tricks $tricks = null;
 
     public function getId(): ?int

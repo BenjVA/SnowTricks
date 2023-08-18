@@ -16,8 +16,8 @@ class Videos
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Tricks::class, cascade: ['persist'], inversedBy: 'videos')]
+    #[ORM\JoinColumn(nullable: false, onDelete: true)]
     private ?Tricks $tricks = null;
 
     public function getId(): ?int

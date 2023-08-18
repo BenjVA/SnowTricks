@@ -30,9 +30,6 @@ class TricksFormType extends AbstractType
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideosFormType::class
-                /*'label' => 'Liens youtube à séparer par des virgules sans espaces si vous en rajoutez plusieurs.',
-                'mapped' => false,
-                'required' => false,*/
             ])
         ;
     }
