@@ -4,21 +4,21 @@ namespace App\Service;
 
 class UrlToEmbedUrl
 {
-    public function toEmbedUrl($url): string
+    public function toEmbedUrl(string $url): string
     {
 
         if (str_contains($url, 'youtube')) {
-            $embedUrl = str_replace('watch?v=', 'embed/', $url);
+            $embedYoutubeUrl = str_replace('watch?v=', 'embed/', $url);
 
-            return $embedUrl;
+            return $embedYoutubeUrl;
         }
 
         if (str_contains($url, 'dailymotion')) {
-            $embedUrl = str_replace('video/', 'embed/video/', $url);
+            $embedDailymotionUrl = str_replace('/video/', '/embed/video/', $url);
 
-            return $embedUrl;
+            return $embedDailymotionUrl;
         }
 
-        return 'Mauvais url, vous devez utiliser des liens youtube ou dailymotion.';
+        return 'Mauvais url, vous devez utiliser des liens en youtube.com ou dailymotion.com.';
     }
 }

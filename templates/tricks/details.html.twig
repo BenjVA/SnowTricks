@@ -5,7 +5,7 @@
 {% block body %}
     <main class="container">
         <section class="row">
-            <div class="col-12">
+            <div class="col-12 text-center">
                 <h1>Détails de {{ trick.name }}</h1>
             </div>
             {% for images in trick.images %}
@@ -13,15 +13,19 @@
                     <img src="{{ asset('uploads/images/tricks/' ~ images.name) }}" alt="{{ trick.name }}">
                 </div>
             {% endfor %}
+            <hr/>
             {% for videos in trick.videos %}
                 <div class="embed-responsive embed-responsive-16by9 col-4">
                     <iframe class="embed-responsive-item" src="{{ videos.url }}" allowfullscreen></iframe>
                 </div>
             {% endfor %}
-            <div>
+            <div class="text-center small">
                 Catégorie: {{ trick.groupTricks|capitalize }}
+            </div>
+            <div class="text-center">
                 <p>{{ trick.description|capitalize }}</p>
             </div>
+            <hr/>
             {% if app.user and app.user.isVerified == 1 %}
                 <h2>Commentaire</h2>
                 {{ render(path('app_comments_add', {'id' : trick.id})) }}
@@ -34,6 +38,7 @@
                         <a href="{{ path('app_register') }}" class="btn btn-outline-dark mb-1">Inscrivez-vous</a> si vous n'avez pas encore de compte
                     </p>
                 </div>
+                <hr/>
             {% endif %}
             {% for comment in comments %}
                 <div>
@@ -41,6 +46,7 @@
                     par {{ comment.users.username }}</small>
                     <p>{{ comment.content }}</p>
                 </div>
+                <hr/>
             {% endfor %}
         </section>
     </main>
