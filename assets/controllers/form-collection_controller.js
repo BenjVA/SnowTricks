@@ -8,7 +8,6 @@ export default class extends Controller {
         prototype: String,
     }
 
-
     addCollectionElement(event)
     {
         const item = document.createElement('li');
