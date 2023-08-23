@@ -32,17 +32,17 @@ class Tricks
     #[Assert\NotBlank]
     private ?string $groupTricks = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, cascade: ['persist', 'remove'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist', 'remove'])]
     private Collection $videos;
 
     public function __construct()
@@ -171,6 +171,13 @@ class Tricks
     public function getVideos(): Collection
     {
         return $this->videos;
+    }
+
+    public function setVideos(?Collection $videos): self
+    {
+        $this->videos = $videos;
+
+        return $this;
     }
 
     public function addVideos(Videos $videos): static

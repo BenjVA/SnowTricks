@@ -58,13 +58,13 @@ class TricksController extends AbstractController
             }
 
             $videos = $form->get('videos')->getData();
-            $urls = explode(',', $videos);
 
-            foreach ($urls as $url) {
-                $embedUrl = $urlToEmbedUrl->toEmbedUrl($url);
+            foreach ($videos as $video) {
+                $embedUrl = $urlToEmbedUrl->toEmbedUrl($video->getUrl());
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
                 $tricks->addVideos($vid);
+                $tricks->removeVideos($video);
             }
 
             $slug = $slugger->slug(strtolower($tricks->getName()));
