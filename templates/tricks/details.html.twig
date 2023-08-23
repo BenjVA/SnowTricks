@@ -9,20 +9,21 @@
                 <h1>Détails de {{ trick.name }}</h1>
             </div>
             {% for images in trick.images %}
-                <div class="col-4">
+                <div class="col-4 my-5">
                     <img src="{{ asset('uploads/images/tricks/' ~ images.name) }}" alt="{{ trick.name }}">
                 </div>
             {% endfor %}
             <hr/>
             {% for videos in trick.videos %}
-                <div class="embed-responsive embed-responsive-16by9 col-4">
+                <div class="embed-responsive embed-responsive-16by9 col-4 my-4">
                     <iframe class="embed-responsive-item" src="{{ videos.url }}" allowfullscreen></iframe>
                 </div>
             {% endfor %}
             <div class="text-center small">
                 Catégorie: {{ trick.groupTricks|capitalize }}
             </div>
-            <div class="text-center">
+            <div>
+                <h3 class="text-center">Description de la figure</h3>
                 <p>{{ trick.description|capitalize }}</p>
             </div>
             <hr/>
