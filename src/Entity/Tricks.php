@@ -143,6 +143,13 @@ class Tricks
         return $this->images;
     }
 
+    public function setImages(?Collection $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
     public function addImage(Images $image): static
     {
         if (!$this->images->contains($image)) {

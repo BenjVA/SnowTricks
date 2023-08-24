@@ -43,10 +43,12 @@ class ImageService
         return $file;
     }
 
-    public function delete(UploadedFile $file, ?string $folder): void
+    public function delete(string $file, ?string $folder): bool
     {
-        if (file_exists($folder . '/' . $file)) {
-            unlink($folder . '/' . $file);
+        if (!file_exists($folder . '/' . $file)) {
+            return false;
         }
+
+        return unlink($folder . '/' . $file);
     }
 }

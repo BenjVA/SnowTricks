@@ -3,7 +3,19 @@
     {{ form_row(form.name) }}
     {{ form_row(form.description) }}
     {{ form_row(form.groupTricks) }}
+
+    {% if app.request.attributes.get('_route') == 'app_tricks_edit' %}
+        <h2>Images</h2>
+        {% for image in tricks.images %}
+            <div>
+                <img src="{{ asset('uploads/images/tricks/' ~ image.name) }}" alt="Image">
+                <a href="{{ path('app_tricks_delete_image', {id: image.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ image.id) }}">Supprimer l'image</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
     {{ form_row(form.images) }}
+
     {{ form_label(form.videos) }}
     <ul class="videos"
         data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
@@ -14,10 +26,6 @@
         {% endfor %}
     </ul>
     <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
-
-    {% for image in form.images %}
-        <li>{{ form_row(image.name) }}</li>
-    {% endfor %}
 
     <button type="submit" class="btn btn-outline-dark mb-3">{{ button_label|default('Ajouter') }}</button>
 {{ form_end(form) }}

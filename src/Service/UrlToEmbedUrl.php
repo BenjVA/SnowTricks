@@ -13,6 +13,12 @@ class UrlToEmbedUrl
             return $embedUrl;
         }
 
-        return 'Mauvais url, vous devez utiliser des liens youtube.';
+        if (str_contains($url, 'dailymotion')) {
+            $embedUrl = str_replace('video/', 'embed/video/', $url);
+
+            return $embedUrl;
+        }
+
+        return 'Mauvais url, vous devez utiliser des liens youtube ou dailymotion.';
     }
 }

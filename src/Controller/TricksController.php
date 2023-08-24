@@ -11,6 +11,8 @@ use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,7 +110,6 @@ class TricksController extends AbstractController
                 $img = new Images();
                 $img->setName($fichier);
                 $tricks->addImage($img);
-                $tricks->removeImage($image);
             }
 
             $videos = $form->get('videos')->getData();
@@ -118,7 +119,7 @@ class TricksController extends AbstractController
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
                 $tricks->addVideos($vid);
-                $tricks->removeVideos($video);
+                $tricks->removeVideo($video);
             }
 
             $slug = $slugger->slug(strtolower($tricks->getName()));
@@ -139,5 +140,26 @@ class TricksController extends AbstractController
             'form' => $form->createView(),
             'tricks' => $tricks
         ]);
+    }
+
+    #[Route('/delete/image/{id}', name: 'delete_image', methods: ['DELETE'])]
+    public function deleteImage(Images $images, Request $request, EntityManagerInterface $entityManager, ImageService $imageService): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if ($this->isCsrfTokenValid('delete' . $images->getId(), $data['_token'])) {
+            $imageName = $images->getName();
+
+            if ($imageService->delete($imageName, '')){
+                $entityManager->remove($images);
+                $entityManager->flush();
+
+                return new JsonResponse(['success' => true], 200);
+            }
+
+            return new JsonResponse(['error' => 'Erreur de suppression'], 400);
+        }
+
+        return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 }
