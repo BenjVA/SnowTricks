@@ -19,7 +19,7 @@ class Images
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: Tricks::class, inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false, onDelete: true)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Tricks $tricks = null;
 
     public function getId(): ?int

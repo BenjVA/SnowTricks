@@ -7,8 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function Symfony\Component\Translation\t;
 
 class TricksFormType extends AbstractType
 {
@@ -30,10 +32,11 @@ class TricksFormType extends AbstractType
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideosFormType::class,
+                'entry_options' => ['label' => false],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'label' => 'Add videos',
-                'by_reference' => false
+                'required' => false,
+                'by_reference' => false,
             ])
         ;
     }

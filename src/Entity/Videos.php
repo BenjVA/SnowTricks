@@ -17,8 +17,13 @@ class Videos
     private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Tricks::class, inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false, onDelete: true)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Tricks $tricks = null;
+
+    public function __toString(): string
+    {
+        return $this->getUrl();
+    }
 
     public function getId(): ?int
     {

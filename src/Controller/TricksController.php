@@ -7,7 +7,6 @@ use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
 use App\Repository\CommentsRepository;
-use App\Repository\TricksRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,11 +31,11 @@ class TricksController extends AbstractController
     }
 
     #[Route('/add', name: 'add')]
-    public function addTricks(Request $request,
+    public function addTricks(Request                $request,
                               EntityManagerInterface $entityManager,
-                              SluggerInterface $slugger,
-                              ImageService $imageService,
-                              UrlToEmbedUrl $urlToEmbedUrl
+                              SluggerInterface       $slugger,
+                              ImageService           $imageService,
+                              UrlToEmbedUrl          $urlToEmbedUrl
     ): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
@@ -57,15 +56,13 @@ class TricksController extends AbstractController
                 $tricks->addImage($img);
                 $tricks->removeImage($image);
             }
-
             $videos = $form->get('videos')->getData();
 
             foreach ($videos as $video) {
-                $embedUrl = $urlToEmbedUrl->toEmbedUrl($video->getUrl());
+                $embedUrl = $urlToEmbedUrl->toEmbedUrl($video);
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
                 $tricks->addVideos($vid);
-                $tricks->removeVideos($video);
             }
 
 
@@ -84,17 +81,18 @@ class TricksController extends AbstractController
         }
 
         return $this->render('tricks/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'trick' => $tricks
         ]);
     }
 
     #[Route('/edit/{slug}', name: 'edit')]
-    public function edit(Tricks $tricks,
-                         Request $request,
-                         ImageService $imageService,
+    public function edit(Tricks                 $tricks,
+                         Request                $request,
+                         ImageService           $imageService,
                          EntityManagerInterface $entityManager,
-                         SluggerInterface $slugger,
-                         UrlToEmbedUrl $urlToEmbedUrl
+                         SluggerInterface       $slugger,
+                         UrlToEmbedUrl          $urlToEmbedUrl
     ): Response
     {
         $form = $this->createForm(TricksFormType::class, $tricks);

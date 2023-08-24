@@ -190,7 +190,7 @@ class Tricks
         return $this;
     }
 
-    public function removeVideos(Videos $videos): static
+    public function removeVideo(Videos $videos): static
     {
         if ($this->videos->removeElement($videos)) {
             // set the owning side to null (unless already changed)
