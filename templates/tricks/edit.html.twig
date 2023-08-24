@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Modifier {{ tricks.name }}{% endblock %}
+
 {% block body %}
-    {% include 'tricks/_form.html.twig' %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12">
+                <h1>Modification de {{ tricks.name }}</h1>
+                {% include 'tricks/_form.html.twig' with {'button_label': 'Modifier'} %}
+            </div>
+        </section>
+    </main>
 {% endblock %}

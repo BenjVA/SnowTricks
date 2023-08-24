@@ -32,17 +32,17 @@ class Tricks
     #[Assert\NotBlank]
     private ?string $groupTricks = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $videos;
 
     public function __construct()

@@ -12,10 +12,13 @@
             <li>{{ form_row(video.url) }}</li>
         {% endfor %}
     </ul>
-    <button type="button" class="add_item_link" data-collection-holder-class="videos">ajouter une vidéo</button>
+    <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
 
-{#{{ form_row(form.videos.vars.prototype) }}#}
-    <button type="submit" class="btn btn-outline-dark mb-3">Valider</button>
+    {#{% for image in form.images %}
+        <li>{{ form_row(image.name) }}</li>
+    {% endfor %}#}
+
+    <button type="submit" class="btn btn-outline-dark mb-3">{{ button_label|default('Ajouter') }}</button>
 {{ form_end(form) }}
 
 <script>
@@ -33,13 +36,33 @@
             );
 
         collectionHolder.appendChild(item);
+        addVideoFormDeleteLink(item);
 
         collectionHolder.dataset.index++;
     };
+
+    const addVideoFormDeleteLink = (item) => {
+        const removeFormButton = document.createElement('button');
+        removeFormButton.innerText = 'Supprimer cette vidéo';
+
+        item.append(removeFormButton);
+
+        removeFormButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // remove the li for the videos form
+            item.remove();
+        });
+    }
 
     document
         .querySelectorAll('.add_item_link')
         .forEach(btn => {
             btn.addEventListener("click", addFormToCollection)
         });
+
+    document
+        .querySelectorAll('ul.videos li')
+        .forEach((video) => {
+            addVideoFormDeleteLink(video)
+        })
 </script>

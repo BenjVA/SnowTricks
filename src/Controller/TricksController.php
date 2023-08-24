@@ -55,6 +55,7 @@ class TricksController extends AbstractController
                 $img = new Images();
                 $img->setName($fichier);
                 $tricks->addImage($img);
+                $tricks->removeImage($image);
             }
 
             $videos = $form->get('videos')->getData();
@@ -66,6 +67,7 @@ class TricksController extends AbstractController
                 $tricks->addVideos($vid);
                 $tricks->removeVideos($video);
             }
+
 
             $slug = $slugger->slug(strtolower($tricks->getName()));
             $tricks->setSlug($slug);
@@ -87,14 +89,57 @@ class TricksController extends AbstractController
     }
 
     #[Route('/edit/{slug}', name: 'edit')]
-    public function edit(Tricks $tricks, TricksRepository $tricksRepository): Response
+    public function edit(Tricks $tricks,
+                         Request $request,
+                         ImageService $imageService,
+                         EntityManagerInterface $entityManager,
+                         SluggerInterface $slugger,
+                         UrlToEmbedUrl $urlToEmbedUrl
+    ): Response
     {
-        $trick = $tricksRepository->find(1);
-
         $form = $this->createForm(TricksFormType::class, $tricks);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get image and videos
+            $images = $form->get('images')->getData();
+
+            foreach ($images as $image) {
+                $fichier = $imageService->add($image);
+
+                $img = new Images();
+                $img->setName($fichier);
+                $tricks->addImage($img);
+                $tricks->removeImage($image);
+            }
+
+            $videos = $form->get('videos')->getData();
+
+            foreach ($videos as $video) {
+                $embedUrl = $urlToEmbedUrl->toEmbedUrl($video->getUrl());
+                $vid = new Videos();
+                $vid->setUrl($embedUrl);
+                $tricks->addVideos($vid);
+                $tricks->removeVideos($video);
+            }
+
+            $slug = $slugger->slug(strtolower($tricks->getName()));
+            $tricks->setSlug($slug);
+
+            $user = $this->getUser();
+            $tricks->setUsers($user);
+
+            $entityManager->persist($tricks);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Figure modifiée avec succès!');
+
+            return $this->redirectToRoute('app_homepage');
+        }
 
         return $this->render('tricks/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'tricks' => $tricks
         ]);
     }
 }
