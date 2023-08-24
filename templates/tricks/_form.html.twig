@@ -14,9 +14,9 @@
     </ul>
     <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
 
-    {#{% for image in form.images %}
+    {% for image in form.images %}
         <li>{{ form_row(image.name) }}</li>
-    {% endfor %}#}
+    {% endfor %}
 
     <button type="submit" class="btn btn-outline-dark mb-3">{{ button_label|default('Ajouter') }}</button>
 {{ form_end(form) }}
