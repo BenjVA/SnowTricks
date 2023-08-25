@@ -150,16 +150,14 @@ class TricksController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $images->getId(), $data['_token'])) {
             $imageName = $images->getName();
 
-            if ($imageService->delete($imageName, '')){
-                $entityManager->remove($images);
-                $entityManager->flush();
+            $imageService->delete($imageName, '');
+            $entityManager->remove($images);
+            $entityManager->flush();
 
-                return new JsonResponse(['success' => true], 200);
+            $this->addFlash('success', 'Image supprimée !');
+
+            return new JsonResponse(['success' => true], 200);
             }
-
-            return new JsonResponse(['error' => 'Erreur de suppression'], 400);
-        }
-
         return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 }
