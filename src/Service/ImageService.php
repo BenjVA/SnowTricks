@@ -42,11 +42,4 @@ class ImageService
 
         return $file;
     }
-
-    public function delete(UploadedFile $file, ?string $folder): void
-    {
-        if (file_exists($folder . '/' . $file)) {
-            unlink($folder . '/' . $file);
-        }
-    }
 }

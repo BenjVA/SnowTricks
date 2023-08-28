@@ -32,17 +32,17 @@ class Tricks
     #[Assert\NotBlank]
     private ?string $groupTricks = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class)]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comments::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Images::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Videos::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $videos;
 
     public function __construct()
@@ -143,6 +143,13 @@ class Tricks
         return $this->images;
     }
 
+    public function setImages(?Collection $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
     public function addImage(Images $image): static
     {
         if (!$this->images->contains($image)) {
@@ -173,6 +180,13 @@ class Tricks
         return $this->videos;
     }
 
+    public function setVideos(?Collection $videos): self
+    {
+        $this->videos = $videos;
+
+        return $this;
+    }
+
     public function addVideos(Videos $videos): static
     {
         if (!$this->videos->contains($videos)) {
@@ -183,7 +197,7 @@ class Tricks
         return $this;
     }
 
-    public function removeVideos(Videos $videos): static
+    public function removeVideo(Videos $videos): static
     {
         if ($this->videos->removeElement($videos)) {
             // set the owning side to null (unless already changed)

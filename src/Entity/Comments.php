@@ -20,8 +20,8 @@ class Comments
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(targetEntity: Tricks::class, cascade: ['persist'], inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false, onDelete: true)]
+    #[ORM\ManyToOne(targetEntity: Tricks::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Tricks $tricks = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
