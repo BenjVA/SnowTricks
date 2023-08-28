@@ -24,12 +24,14 @@
                             <h5 class="card-title">{{ trick.name }}</h5>
                             <p class="card-text">{{ trick.description}}</p>
                             <a href="{{ path('app_tricks_details', {"slug": trick.slug}) }}" class="btn btn-outline-dark">Détails de la figure</a>
-                        </div>
-                        <div>
-                            <a href="" class="me-2"><i class="fa-solid fa-trash" style="color: #ff0000;"></i></a>
-                            <a href="{{ path('app_tricks_edit', {"slug": trick.slug}) }}" class="ms-2">
-                                <i class="fa-solid fa-pen-to-square" style="color: #022b6c;"></i>
-                            </a>
+                            {% if app.user and app.user.isVerified == 1 %}
+                                <div class="py-3">
+                                    <a href="" class="me-2"><i class="fa-solid fa-trash" style="color: #ff0000;"></i></a>
+                                    <a href="{{ path('app_tricks_edit', {"slug": trick.slug}) }}" class="ms-2">
+                                        <i class="fa-solid fa-pen-to-square" style="color: #022b6c;"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
