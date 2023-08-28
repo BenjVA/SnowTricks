@@ -143,14 +143,18 @@ class TricksController extends AbstractController
     }
 
     #[Route('/delete/image/{id}', name: 'delete_image', methods: ['DELETE'])]
-    public function deleteImage(Images $images, Request $request, EntityManagerInterface $entityManager, ImageService $imageService): JsonResponse
+    public function deleteImage(Images $images,
+                                Request $request,
+                                EntityManagerInterface $entityManager,
+    ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         if ($this->isCsrfTokenValid('delete' . $images->getId(), $data['_token'])) {
             $imageName = $images->getName();
 
-            $imageService->delete($imageName, '');
+            unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
+
             $entityManager->remove($images);
             $entityManager->flush();
 
