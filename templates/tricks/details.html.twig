@@ -45,12 +45,41 @@
             {% endif %}
             {% for comment in comments %}
                 <div>
+                    <img class="rounded-circle" src="https://dummyimage.com/50x50/000/fff.jpg" alt="Fake profile picture">
                     <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
                     par {{ comment.users.username }}</small>
                     <p>{{ comment.content }}</p>
+                    {% if comment.users == app.user %}
+                        <div>
+                            <a href="{{ path('app_comments_edit', {id: comment.id}) }}" class="btn btn-outline-dark mb-3">
+                                <i class="fa-solid fa-pen-to-square" style="color: #022b6c;"></i>
+                            </a>
+                            <a href="{{ path('app_comments_delete', {id: comment.id}) }}"
+                               data-delete
+                               data-token="{{ csrf_token('delete' ~ comment.id) }}" class="btn btn-outline-dark mb-3">
+                                <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
                 <hr/>
             {% endfor %}
+            {% if comments|length > 0 %}
+                <div class="my-2">
+                    {% if previous >= 0 %}
+                        <a href="{{ path('app_tricks_details', { slug: trick.slug, offset: previous }) }}"
+                        class="btn btn-outline-dark">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    {% endif %}
+                    {% if next < comments|length %}
+                        <a href="{{ path('app_tricks_details', { slug: trick.slug, offset: next }) }}"
+                           class="btn btn-outline-dark">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </section>
     </main>
 {% endblock %}
