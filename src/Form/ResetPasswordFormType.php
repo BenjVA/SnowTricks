@@ -15,7 +15,7 @@ class ResetPasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('plainPassword',PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'constraints' => [
                     new NotBlank([
@@ -28,8 +28,7 @@ class ResetPasswordFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

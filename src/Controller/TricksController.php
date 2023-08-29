@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\Images;
 use App\Entity\Tricks;
 use App\Entity\Videos;
@@ -148,8 +149,8 @@ class TricksController extends AbstractController
     }
 
     #[Route('/delete/image/{id}', name: 'delete_image', methods: ['DELETE'])]
-    public function deleteImage(Images $images,
-                                Request $request,
+    public function deleteImage(Images                 $images,
+                                Request                $request,
                                 EntityManagerInterface $entityManager,
     ): JsonResponse
     {
@@ -166,7 +167,7 @@ class TricksController extends AbstractController
             $this->addFlash('success', 'Image supprimée !');
 
             return new JsonResponse(['success' => true], 200);
-            }
+        }
         return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 }

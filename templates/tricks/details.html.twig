@@ -46,7 +46,11 @@
             {% for comment in comments %}
                 <div>
                     <img class="rounded-circle" src="https://dummyimage.com/50x50/000/fff.jpg" alt="Fake profile picture">
-                    <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                    {% if comment.updatedAt %}
+                        <small>Posté le {{ comment.updatedAt ? comment.updatedAt|date('d/m/Y H:i') : '' }}
+                    {% else %}
+                        <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                    {% endif %}
                     par {{ comment.users.username }}</small>
                     <p>{{ comment.content }}</p>
                     {% if comment.users == app.user %}
@@ -82,4 +86,31 @@
             {% endif %}
         </section>
     </main>
+    <script>
+        let links = document.querySelectorAll("[data-delete]");
+
+        for (let link of links) {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                if (confirm("Êtes-vous sur de vouloir supprimer ce commentaire ? ")) {
+                    fetch(this.getAttribute("href"), {
+                        method: "DELETE",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({"_token": this.dataset.token})
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.parentElement.parentElement.remove();
+                            } else {
+                                alert(data.error);
+                            }
+                        })
+                }
+            });
+        }
+    </script>
 {% endblock %}

@@ -14,10 +14,10 @@ class JWTService
      * @return string
      */
     public function generate(
-        array $header,
-        array $payload,
+        array  $header,
+        array  $payload,
         string $secret,
-        int $validity = 10800
+        int    $validity = 10800
     ): string
     {
         if ($validity > 0) {
@@ -52,9 +52,9 @@ class JWTService
     public function isValid(string $token): bool
     {
         return preg_match(
-            '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
+                '/^[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+\.[a-zA-Z0-9\-\_\=]+$/',
                 $token
-        ) === 1;
+            ) === 1;
     }
 
     public function getPayload(string $token): array

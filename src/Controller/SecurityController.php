@@ -43,11 +43,11 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/forgottenpassword', name: 'app_forgotten_password')]
-    public function forgottenPassword(Request $request,
-                                      UsersRepository $usersRepository,
-                                      JWTService $JWTService,
+    public function forgottenPassword(Request                $request,
+                                      UsersRepository        $usersRepository,
+                                      JWTService             $JWTService,
                                       EntityManagerInterface $entityManager,
-                                      SendMailService $mailService
+                                      SendMailService        $mailService
     ): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -106,10 +106,10 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/forgottenpassword/{token}', name: 'app_reset_password')]
-    public function resetPassword(string $token,
-                                  Request $request,
-                                  UsersRepository $usersRepository,
-                                  EntityManagerInterface $entityManager,
+    public function resetPassword(string                      $token,
+                                  Request                     $request,
+                                  UsersRepository             $usersRepository,
+                                  EntityManagerInterface      $entityManager,
                                   UserPasswordHasherInterface $passwordHasher
     ): Response
     {
