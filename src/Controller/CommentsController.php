@@ -49,4 +49,16 @@ class CommentsController extends AbstractController
             'comment' => $comments,
         ]);
     }
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(): Response
+    {
+
+    }
+
+    #[Route('/edit/{id}', name: 'edit')]
+    public function edit(): Response
+    {
+
+    }
 }

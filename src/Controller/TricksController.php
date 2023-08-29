@@ -22,13 +22,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TricksController extends AbstractController
 {
     #[Route('/details/{slug}', name: 'details')]
-    public function tricksDetails(Tricks $trick, CommentsRepository $commentsRepository): Response
+    public function tricksDetails(Tricks $trick, Request $request, CommentsRepository $commentsRepository): Response
     {
-        $comments = $commentsRepository->findAll();
+        $offset = max(0, $request->query->getInt('offset'));
+        $commentsPaginated = $commentsRepository->getCommentsPaginated($trick, $offset);
+        $nextComments = min(count($commentsPaginated), $offset + CommentsRepository::PAGINATOR_PER_PAGE);
+        $previousComments = $offset - CommentsRepository::PAGINATOR_PER_PAGE;
 
         return $this->render('tricks/details.html.twig', [
             'trick' => $trick,
-            'comments' => $comments
+            'comments' => $commentsPaginated,
+            'next' => $nextComments,
+            'previous' => $previousComments
         ]);
     }
 
