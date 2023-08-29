@@ -3,28 +3,28 @@
 {% block title %}Connectez vous!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-    <h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
-    <div class="my-2">
-        <label for="inputMail">Mail</label>
-        <input type="text" value="{{ last_username }}" name="mail" id="inputMail" class="form-control" autocomplete="username" required autofocus>
-    </div>
-    <div class="my-2">
-        <label for="inputPassword">Mot de passe</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    </div>
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
+        <div class="my-2">
+            <label for="inputMail">Mail</label>
+            <input type="text" value="{{ last_username }}" name="mail" id="inputMail" class="form-control" autocomplete="username" required autofocus>
+        </div>
+        <div class="my-2">
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
 
-    <button class="btn btn-lg btn-outline-dark my-2" type="submit">
-        Connexion
-    </button>
-    <a href="{{ path('app_register') }}" class="btn btn-secondary mt-1">M'inscrire</a>
-    <a href="{{ path('app_forgotten_password') }}" class="btn btn-secondary mt-1">Mot de passe oublié</a>
-</form>
+        <button class="btn btn-lg btn-outline-dark my-2" type="submit">
+            Connexion
+        </button>
+        <a href="{{ path('app_register') }}" class="btn btn-secondary mt-1">M'inscrire</a>
+        <a href="{{ path('app_forgotten_password') }}" class="btn btn-secondary mt-1">Mot de passe oublié</a>
+    </form>
 {% endblock %}

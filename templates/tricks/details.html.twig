@@ -47,11 +47,11 @@
                 <div>
                     <img class="rounded-circle" src="https://dummyimage.com/50x50/000/fff.jpg" alt="Fake profile picture">
                     {% if comment.updatedAt %}
-                        <small>Posté le {{ comment.updatedAt ? comment.updatedAt|date('d/m/Y H:i') : '' }}
+                        <small>Posté le {{ comment.updatedAt ? comment.updatedAt|date('d/m/Y H:i') : '' }}</small>
                     {% else %}
-                        <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                        <small>Posté le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}</small>
                     {% endif %}
-                    par {{ comment.users.username }}</small>
+                    <small>par {{ comment.users.username }}</small>
                     <p>{{ comment.content }}</p>
                     {% if comment.users == app.user %}
                         <div>

@@ -1,42 +1,73 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<main class="container">
-    <section class="row">
-        <img src="{{ asset('images/bigjump.jpg') }}" alt="snowboard jump" class="container-fluid">
-        <div id="arrow">
-            <a href="#tricks" class="h1"><i class="fas fa-arrow-circle-down text-light"></i></a>
-        </div>
-        <div class="text-center">
-            <h1>Site web communautaire dédié aux discussions autour des figures de snowboards</h1>
-            <h3 id="tricks">Voici tout les tricks</h3>
-        </div>
-        <section class="row justify-content-center">
-            {% for trick in tricks %}
-                <div class="text-center col-md-6 col-lg-3 col-sm-12 mx-5 my-4">
-                    <div class="card h-100" style="width: 18rem;">
+    <main class="container">
+        <section class="row">
+            <img src="{{ asset('images/bigjump.jpg') }}" alt="snowboard jump" class="container-fluid">
+            <div id="arrow">
+                <a href="#tricks" class="h1"><i class="fas fa-arrow-circle-down text-light"></i></a>
+            </div>
+            <div class="text-center">
+                <h1>Site web communautaire dédié aux discussions autour des figures de snowboards</h1>
+                <h3 id="tricks">Voici tout les tricks</h3>
+            </div>
+            <section class="row justify-content-center">
+                {% for trick in tricks %}
+                    <div class="text-center col-md-6 col-lg-3 col-sm-12 mx-5 my-4">
+                        <div class="card h-100" style="width: 18rem;">
                             {% if trick.images|first %}
                                 <img src="{{ asset('uploads/images/tricks/' ~ trick.images|first.name) }}">
                             {% else %}
                                 <img src="{{ asset('images/defaulttrickimg.jpg') }}" class="card-img-top" alt="Tricks Header image">
                             {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ trick.name }}</h5>
-                            <p class="card-text">{{ trick.description}}</p>
-                            <a href="{{ path('app_tricks_details', {"slug": trick.slug}) }}" class="btn btn-outline-dark">Détails de la figure</a>
-                            {% if app.user and app.user.isVerified == 1 %}
-                                <div class="py-3">
-                                    <a href="" class="me-2"><i class="fa-solid fa-trash" style="color: #ff0000;"></i></a>
-                                    <a href="{{ path('app_tricks_edit', {"slug": trick.slug}) }}" class="ms-2">
-                                        <i class="fa-solid fa-pen-to-square" style="color: #022b6c;"></i>
-                                    </a>
-                                </div>
-                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ trick.name }}</h5>
+                                <p class="card-text">{{ trick.description}}</p>
+                                <a href="{{ path('app_tricks_details', {"slug": trick.slug}) }}" class="btn btn-outline-dark">Détails de la figure</a>
+                                {% if app.user and app.user.isVerified == 1 %}
+                                    <div class="py-3">
+                                        <a href="{{ path('app_tricks_delete_trick', {"slug": trick.slug}) }}"
+                                           data-delete
+                                           data-token="{{ csrf_token('delete' ~ trick.id) }}" class="me-2">
+                                            <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
+                                        </a>
+                                        <a href="{{ path('app_tricks_edit', {"slug": trick.slug}) }}" class="ms-2">
+                                            <i class="fa-solid fa-pen-to-square" style="color: #022b6c;"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </section>
         </section>
-    </section>
-</main>
+    </main>
+    <script>
+        let links = document.querySelectorAll("[data-delete]");
+
+        for (let link of links) {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                if (confirm("Êtes-vous sur de vouloir supprimer cette figure ? ")) {
+                    fetch(this.getAttribute("href"), {
+                        method: "DELETE",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({"_token": this.dataset.token})
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.parentElement.parentElement.parentElement.remove();
+                            } else {
+                                alert(data.error);
+                            }
+                        })
+                }
+            });
+        }
+    </script>
 {% endblock %}
