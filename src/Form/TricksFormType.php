@@ -14,12 +14,12 @@ class TricksFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', options:[
+            ->add('name', options: [
                 'label' => 'Nom de la figure'
             ])
             ->add('description')
-            ->add('groupTricks', options:[
-             'label' => 'Catégorie de la figure'
+            ->add('groupTricks', options: [
+                'label' => 'Catégorie de la figure'
             ])
             ->add('images', FileType::class, [
                 'label' => 'Images',
@@ -34,8 +34,7 @@ class TricksFormType extends AbstractType
                 'allow_delete' => true,
                 'required' => false,
                 'by_reference' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

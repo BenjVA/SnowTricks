@@ -23,7 +23,7 @@ class SendMailService
         string $to,
         string $subject,
         string $template,
-        array $context
+        array  $context
     ): void
     {
         $email = (new TemplatedEmail())

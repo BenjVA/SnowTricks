@@ -1,9 +1,0 @@
-{% extends 'base.html.twig' %}
-
-{% block body %}
-    {% for comment in comments %}
-        <div>
-            <small>Créé le {{ comment.createdAt }}</small>
-            <p>{{ comment.content }}</p>
-        </div>
-{% endblock %}

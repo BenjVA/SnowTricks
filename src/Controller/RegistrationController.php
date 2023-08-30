@@ -23,13 +23,13 @@ class RegistrationController extends AbstractController
      * @throws TransportExceptionInterface
      */
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request,
+    public function register(Request                     $request,
                              UserPasswordHasherInterface $userPasswordHasher,
-                             UserAuthenticatorInterface $userAuthenticator,
-                             UsersAuthenticator $authenticator,
-                             EntityManagerInterface $entityManager,
-                             SendMailService $mailService,
-                             JWTService $JWTService
+                             UserAuthenticatorInterface  $userAuthenticator,
+                             UsersAuthenticator          $authenticator,
+                             EntityManagerInterface      $entityManager,
+                             SendMailService             $mailService,
+                             JWTService                  $JWTService
     ): Response
     {
         $user = new Users();
@@ -86,15 +86,15 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/{token}', name: 'app_verify_email')]
-    public function verifyUserEmail(string $token,
-                                    JWTService $JWTService,
-                                    UsersRepository $usersRepository,
+    public function verifyUserEmail(string                 $token,
+                                    JWTService             $JWTService,
+                                    UsersRepository        $usersRepository,
                                     EntityManagerInterface $entityManager
     ): Response
     {
         if ($JWTService->isValid($token)
-        && !$JWTService->isExpired($token)
-        && $JWTService->checkTokenSignature($token, $this->getParameter('app.jwtsecret'))) {
+            && !$JWTService->isExpired($token)
+            && $JWTService->checkTokenSignature($token, $this->getParameter('app.jwtsecret'))) {
             $payload = $JWTService->getPayload($token);
             $user = $usersRepository->find($payload['user_id']);
 
@@ -115,9 +115,8 @@ class RegistrationController extends AbstractController
      * @throws TransportExceptionInterface
      */
     #[Route('/resendverification', name: 'app_resend_verif')]
-    public function resendVerificationMail(JWTService $JWTService,
+    public function resendVerificationMail(JWTService      $JWTService,
                                            SendMailService $mailService,
-                                           UsersRepository $usersRepository
     ): Response
     {
         $user = $this->getUser();

@@ -1,6 +1,11 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_widget(form.content) }}
+    {% if app.request.attributes.get('_route') == 'app_tricks_edit' %}
+        {% for comments in comment %}
+            <div>{{ comments.content }}</div>
+        {% endfor %}
+    {% endif %}
     <div>
-        <button type="submit" class="btn btn-outline-dark mb-3">Envoyer</button>
+        <button type="submit" class="btn btn-outline-dark my-3">{{ button_label|default('Envoyer') }}</button>
     </div>
 {{ form_end(form) }}

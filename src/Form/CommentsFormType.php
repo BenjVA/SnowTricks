@@ -14,8 +14,7 @@ class CommentsFormType extends AbstractType
         $builder
             ->add('content', options: [
                 'label' => false
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

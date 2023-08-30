@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[UniqueEntity(fields: ['mail'], message: 'Il existe déjà un compte avec cette adresse email.')]
+#[UniqueEntity(fields: ['username'], message: 'Il existe déjà un compte avec ce nom d\'utilisateur.')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -198,7 +199,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->mail;
+        return (string)$this->mail;
     }
 
     public function getIsVerified(): ?bool
