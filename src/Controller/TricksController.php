@@ -100,6 +100,8 @@ class TricksController extends AbstractController
                          UrlToEmbedUrl          $urlToEmbedUrl
     ): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $form = $this->createForm(TricksFormType::class, $tricks);
         $form->handleRequest($request);
 
