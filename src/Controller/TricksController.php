@@ -68,6 +68,7 @@ class TricksController extends AbstractController
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
                 $tricks->addVideos($vid);
+                $tricks->removeVideo($video);
             }
 
 
@@ -158,10 +159,10 @@ class TricksController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $images->getId(), $data['_token'])) {
             $imageName = $images->getName();
 
-            unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
-
             $entityManager->remove($images);
             $entityManager->flush();
+
+            unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
 
             $this->addFlash('success', 'Image supprimée !');
 
@@ -171,13 +172,20 @@ class TricksController extends AbstractController
     }
 
     #[Route('/delete/{slug}', name: 'delete_trick')]
-    public function deleteTricks(Request $request, EntityManagerInterface $entityManager, Tricks $tricks): JsonResponse
+    public function deleteTricks(Request $request,
+                                 EntityManagerInterface $entityManager,
+                                 Tricks $tricks,
+                                 ImageService $imageService
+    ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
 
         if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $data['_token'])) {
             $entityManager->remove($tricks);
             $entityManager->flush();
+            $fileName = $tricks->getImages();
+            $imageService->remove($this->getParameter('images_directory') . 'tricks/' . $fileName);
 
             $this->addFlash('success', 'Figure supprimée avec succès !');
 

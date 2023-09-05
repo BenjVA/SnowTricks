@@ -2,17 +2,21 @@
 
 namespace App\Service;
 
+use App\Entity\Images;
 use PHPUnit\Util\Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageService
 {
     private ParameterBagInterface $parameters;
+    private Filesystem $filesystem;
 
-    public function __construct(ParameterBagInterface $parameters)
+    public function __construct(ParameterBagInterface $parameters, Filesystem $filesystem)
     {
         $this->parameters = $parameters;
+        $this->filesystem = $filesystem;
     }
 
     public function add(UploadedFile $image, ?string $directory = ''): string
@@ -41,5 +45,10 @@ class ImageService
         $image->move($path . '/tricks', $file);
 
         return $file;
+    }
+
+    public function remove(string $file): void
+    {
+        $this->filesystem->remove($file);
     }
 }

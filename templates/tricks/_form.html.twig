@@ -4,8 +4,8 @@
     {{ form_row(form.description) }}
     {{ form_row(form.groupTricks) }}
 
+    <h2>Images</h2>
     {% if app.request.attributes.get('_route') == 'app_tricks_edit' %}
-        <h2>Images</h2>
         {% for image in tricks.images %}
             <div>
                 <img src="{{ asset('uploads/images/tricks/' ~ image.name) }}" alt="Image">
