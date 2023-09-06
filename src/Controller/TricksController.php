@@ -171,7 +171,7 @@ class TricksController extends AbstractController
         return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 
-    #[Route('/delete/{slug}', name: 'delete_trick')]
+    #[Route('/delete/{slug}', name: 'delete_trick', methods: ['DELETE'])]
     public function deleteTricks(Request $request,
                                  EntityManagerInterface $entityManager,
                                  Tricks $tricks,
@@ -179,12 +179,12 @@ class TricksController extends AbstractController
     ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
+        $fileName = $tricks->getImages()->get('name');
 
         if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $data['_token'])) {
             $entityManager->remove($tricks);
             $entityManager->flush();
-            $fileName = $tricks->getImages();
+
             $imageService->remove($this->getParameter('images_directory') . 'tricks/' . $fileName);
 
             $this->addFlash('success', 'Figure supprimée avec succès !');

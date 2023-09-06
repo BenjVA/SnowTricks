@@ -2,21 +2,17 @@
 
 namespace App\Service;
 
-use App\Entity\Images;
 use PHPUnit\Util\Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageService
 {
     private ParameterBagInterface $parameters;
-    private Filesystem $filesystem;
 
-    public function __construct(ParameterBagInterface $parameters, Filesystem $filesystem)
+    public function __construct(ParameterBagInterface $parameters)
     {
         $this->parameters = $parameters;
-        $this->filesystem = $filesystem;
     }
 
     public function add(UploadedFile $image, ?string $directory = ''): string
@@ -30,10 +26,8 @@ class ImageService
         }
 
         match ($imageInfos['mime']) {
-            'image/png' => imagecreatefrompng($image),
             'image/jpeg' => imagecreatefromjpeg($image),
-            'image/webp' => imagecreatefromwebp($image),
-            default => throw new Exception('Format d\'image incorrect, vous devez utiliser des fichiers en .jpeg, .png ou .webp'),
+            default => throw new Exception('Format d\'image incorrect, vous devez utiliser des fichiers en .jpeg'),
         };
 
         $path = $this->parameters->get('images_directory') . $directory;
@@ -49,6 +43,8 @@ class ImageService
 
     public function remove(string $file): void
     {
-        $this->filesystem->remove($file);
+        if (file_exists($this->parameters->get('images_directory') . '/' . $file)) {
+            unlink($this->parameters->get('images_directory') . '/' . $file);
+        }
     }
 }
