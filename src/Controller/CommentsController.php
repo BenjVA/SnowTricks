@@ -7,7 +7,6 @@ use App\Entity\Tricks;
 use App\Form\CommentsFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,7 +50,7 @@ class CommentsController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
+    /*#[Route('/delete/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(Request $request, Comments $comments, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -66,7 +65,7 @@ class CommentsController extends AbstractController
         }
 
         return new JsonResponse(['error' => 'Token invalide'], 400);
-    }
+    }*/
 
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(Comments $comments, Request $request, EntityManagerInterface $entityManager, Tricks $tricks): Response

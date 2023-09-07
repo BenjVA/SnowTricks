@@ -7,13 +7,10 @@ use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
 use App\Repository\CommentsRepository;
-use App\Repository\ImagesRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -167,8 +164,6 @@ class TricksController extends AbstractController
 
             unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
 
-            $this->addFlash('success', 'Image supprimée !');
-
             return new JsonResponse(['success' => true], 200);
         }
         return new JsonResponse(['error' => 'Token invalide'], 400);
@@ -191,8 +186,6 @@ class TricksController extends AbstractController
                 $imageName = $image->getName();
                 unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
             }
-
-            $this->addFlash('success', 'Figure supprimée avec succès !');
 
             return new JsonResponse(['success' => true], 200);
         }

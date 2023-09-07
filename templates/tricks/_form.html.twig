@@ -24,7 +24,6 @@
         data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
         data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
     >
-        {{ form_row(form.videos) }}
         {% for video in form.videos %}
             <li>{{ form_widget(video.url) }}</li>
         {% endfor %}
@@ -36,48 +35,6 @@
     </div>
 {{ form_end(form) }}
 
-<script>
-    const addFormToCollection = (e) => {
-        const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-
-        const item = document.createElement('li');
-
-        item.innerHTML = collectionHolder
-            .dataset
-            .prototype
-            .replace(
-                /__name__/g,
-                collectionHolder.dataset.index
-            );
-
-        collectionHolder.appendChild(item);
-        addVideoFormDeleteLink(item);
-
-        collectionHolder.dataset.index++;
-    };
-
-    const addVideoFormDeleteLink = (item) => {
-        const removeFormButton = document.createElement('button');
-        removeFormButton.innerText = 'Supprimer cette vidéo';
-
-        item.append(removeFormButton);
-
-        removeFormButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            // remove the li for the videos form
-            item.remove();
-        });
-    }
-
-    document
-        .querySelectorAll('.add_item_link')
-        .forEach(btn => {
-            btn.addEventListener("click", addFormToCollection)
-        });
-
-    document
-        .querySelectorAll('ul.videos li')
-        .forEach((video) => {
-            addVideoFormDeleteLink(video)
-        })
-</script>
+{% block javascript %}
+    <script src="{{ asset('assets/videosForm.js') }}" defer></script>
+{% endblock %}
