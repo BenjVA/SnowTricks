@@ -16,7 +16,7 @@
                     <div class="text-center col-md-6 col-lg-3 col-sm-12 mx-5 my-4">
                         <div class="card h-100" style="width: 18rem;">
                             {% if trick.images|first %}
-                                <img src="{{ asset('uploads/images/tricks/' ~ trick.images|first.name) }}">
+                                <img src="{{ asset('uploads/images/tricks/' ~ trick.images|first.name) }}" class="card-img-top" alt="Tricks Header image">
                             {% else %}
                                 <img src="{{ asset('images/defaulttrickimg.jpg') }}" class="card-img-top" alt="Tricks Header image">
                             {% endif %}
@@ -28,7 +28,7 @@
                                     <div class="py-3">
                                         <a href="{{ path('app_tricks_delete_trick', {"slug": trick.slug}) }}"
                                            data-delete
-                                           data-token="{{ csrf_token('delete' ~ trick.id) }}" class="me-2">
+                                           data-token="{{ csrf_token('delete' ~ trick.id) }}">
                                             <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
                                         </a>
                                         <a href="{{ path('app_tricks_edit', {"slug": trick.slug}) }}" class="ms-2">

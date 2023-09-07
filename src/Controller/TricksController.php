@@ -7,10 +7,13 @@ use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
 use App\Repository\CommentsRepository;
+use App\Repository\ImagesRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -175,17 +178,19 @@ class TricksController extends AbstractController
     public function deleteTricks(Request $request,
                                  EntityManagerInterface $entityManager,
                                  Tricks $tricks,
-                                 ImageService $imageService
     ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $fileName = $tricks->getImages()->get('name');
+        $images = $tricks->getImages();
 
         if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $data['_token'])) {
             $entityManager->remove($tricks);
             $entityManager->flush();
 
-            $imageService->remove($this->getParameter('images_directory') . 'tricks/' . $fileName);
+            foreach ($images as $image) {
+                $imageName = $image->getName();
+                unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
+            }
 
             $this->addFlash('success', 'Figure supprimée avec succès !');
 
