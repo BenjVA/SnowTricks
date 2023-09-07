@@ -30,7 +30,8 @@ class CommentsController extends AbstractController
 
             $comments->setUsers($user)
                 ->setTricks($tricks)
-                ->setCreatedAt($now);
+                ->setCreatedAt($now)
+                ->setUpdatedAt($now);
 
             $entityManager->persist($comments);
             $entityManager->flush();

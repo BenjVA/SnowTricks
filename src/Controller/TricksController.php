@@ -7,10 +7,13 @@ use App\Entity\Tricks;
 use App\Entity\Videos;
 use App\Form\TricksFormType;
 use App\Repository\CommentsRepository;
+use App\Repository\ImagesRepository;
 use App\Service\ImageService;
 use App\Service\UrlToEmbedUrl;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,6 +71,7 @@ class TricksController extends AbstractController
                 $vid = new Videos();
                 $vid->setUrl($embedUrl);
                 $tricks->addVideos($vid);
+                $tricks->removeVideo($video);
             }
 
 
@@ -158,10 +162,10 @@ class TricksController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $images->getId(), $data['_token'])) {
             $imageName = $images->getName();
 
-            unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
-
             $entityManager->remove($images);
             $entityManager->flush();
+
+            unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
 
             $this->addFlash('success', 'Image supprimée !');
 
@@ -170,14 +174,23 @@ class TricksController extends AbstractController
         return new JsonResponse(['error' => 'Token invalide'], 400);
     }
 
-    #[Route('/delete/{slug}', name: 'delete_trick')]
-    public function deleteTricks(Request $request, EntityManagerInterface $entityManager, Tricks $tricks): JsonResponse
+    #[Route('/delete/{slug}', name: 'delete_trick', methods: ['DELETE'])]
+    public function deleteTricks(Request $request,
+                                 EntityManagerInterface $entityManager,
+                                 Tricks $tricks,
+    ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $images = $tricks->getImages();
 
         if ($this->isCsrfTokenValid('delete' . $tricks->getId(), $data['_token'])) {
             $entityManager->remove($tricks);
             $entityManager->flush();
+
+            foreach ($images as $image) {
+                $imageName = $image->getName();
+                unlink($this->getParameter('images_directory') . 'tricks/' . $imageName);
+            }
 
             $this->addFlash('success', 'Figure supprimée avec succès !');
 

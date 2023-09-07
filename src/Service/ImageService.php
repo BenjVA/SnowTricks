@@ -26,10 +26,8 @@ class ImageService
         }
 
         match ($imageInfos['mime']) {
-            'image/png' => imagecreatefrompng($image),
             'image/jpeg' => imagecreatefromjpeg($image),
-            'image/webp' => imagecreatefromwebp($image),
-            default => throw new Exception('Format d\'image incorrect, vous devez utiliser des fichiers en .jpeg, .png ou .webp'),
+            default => throw new Exception('Format d\'image incorrect, vous devez utiliser des fichiers en .jpeg'),
         };
 
         $path = $this->parameters->get('images_directory') . $directory;
@@ -41,5 +39,12 @@ class ImageService
         $image->move($path . '/tricks', $file);
 
         return $file;
+    }
+
+    public function remove(string $file): void
+    {
+        if (file_exists($this->parameters->get('images_directory') . '/' . $file)) {
+            unlink($this->parameters->get('images_directory') . '/' . $file);
+        }
     }
 }
