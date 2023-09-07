@@ -16,6 +16,7 @@ for (let link of links) {
                 .then(data => {
                     if (data.success) {
                         this.parentElement.parentElement.parentElement.remove();
+                        alert("La figure a été correctement supprimé.")
                     } else {
                         alert(data.error);
                     }
