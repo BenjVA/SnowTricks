@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomepageController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/', name: 'app_homepage', methods: ['GET'])]
     public function homepage(TricksRepository $tricksRepository): Response
     {
         $tricks = $tricksRepository->findAll();

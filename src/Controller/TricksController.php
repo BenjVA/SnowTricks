@@ -20,7 +20,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/tricks', name: 'app_tricks_')]
 class TricksController extends AbstractController
 {
-    #[Route('/details/{slug}', name: 'details')]
+    #[Route('/details/{slug}', name: 'details', methods: ['GET'])]
     public function tricksDetails(Tricks $trick, Request $request, CommentsRepository $commentsRepository): Response
     {
         $offset = max(0, $request->query->getInt('offset'));
@@ -36,7 +36,7 @@ class TricksController extends AbstractController
         ]);
     }
 
-    #[Route('/add', name: 'add')]
+    #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     public function addTricks(Request                $request,
                               EntityManagerInterface $entityManager,
                               SluggerInterface       $slugger,
@@ -92,7 +92,7 @@ class TricksController extends AbstractController
         ]);
     }
 
-    #[Route('/edit/{slug}', name: 'edit')]
+    #[Route('/edit/{slug}', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Tricks                 $tricks,
                          Request                $request,
                          ImageService           $imageService,

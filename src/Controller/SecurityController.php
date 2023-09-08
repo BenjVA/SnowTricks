@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'app_login')]
+    #[Route('/login', name: 'app_login', methods: ['GET'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
@@ -36,13 +36,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/logout', name: 'app_logout')]
+    #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/forgottenpassword', name: 'app_forgotten_password')]
+    #[Route('/forgottenpassword', name: 'app_forgotten_password', methods: ['GET'])]
     public function forgottenPassword(Request                $request,
                                       UsersRepository        $usersRepository,
                                       JWTService             $JWTService,
@@ -105,7 +105,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/forgottenpassword/{token}', name: 'app_reset_password')]
+    #[Route('/forgottenpassword/{token}', name: 'app_reset_password', methods: ['GET'])]
     public function resetPassword(string                      $token,
                                   Request                     $request,
                                   UsersRepository             $usersRepository,

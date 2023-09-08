@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/comments', name: 'app_comments_')]
 class CommentsController extends AbstractController
 {
-    #[Route('/add/{id}', name: 'add')]
+    #[Route('/add/{id}', name: 'add', methods: ['GET', 'POST'])]
     public function add(Request $request, Tricks $tricks, EntityManagerInterface $entityManager): Response
     {
         $comments = new Comments();
@@ -67,7 +67,7 @@ class CommentsController extends AbstractController
         return new JsonResponse(['error' => 'Token invalide'], 400);
     }*/
 
-    #[Route('/edit/{id}', name: 'edit')]
+    #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Comments $comments, Request $request, EntityManagerInterface $entityManager, Tricks $tricks): Response
     {
         $form = $this->createForm(CommentsFormType::class, $comments);

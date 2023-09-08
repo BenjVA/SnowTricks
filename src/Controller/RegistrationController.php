@@ -22,7 +22,7 @@ class RegistrationController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(Request                     $request,
                              UserPasswordHasherInterface $userPasswordHasher,
                              UserAuthenticatorInterface  $userAuthenticator,
@@ -85,7 +85,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/{token}', name: 'app_verify_email')]
+    #[Route('/verify/{token}', name: 'app_verify_email', methods: ['GET', 'POST'])]
     public function verifyUserEmail(string                 $token,
                                     JWTService             $JWTService,
                                     UsersRepository        $usersRepository,
@@ -114,7 +114,7 @@ class RegistrationController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route('/resendverification', name: 'app_resend_verif')]
+    #[Route('/resendverification', name: 'app_resend_verif', methods: ['GET', 'POST'])]
     public function resendVerificationMail(JWTService      $JWTService,
                                            SendMailService $mailService,
     ): Response
