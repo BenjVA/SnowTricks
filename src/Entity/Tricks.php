@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Trait\SlugTrait;
+use App\Entity\Traits\SlugTrait;
 use App\Repository\TricksRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
