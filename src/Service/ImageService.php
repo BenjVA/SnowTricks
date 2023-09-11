@@ -15,7 +15,7 @@ class ImageService
         $this->parameters = $parameters;
     }
 
-    public function add(UploadedFile $image, ?string $directory = ''): string
+    public function add(UploadedFile $image): string
     {
         $file = md5(uniqid(rand(), true)) . '.jpeg';
 
@@ -30,7 +30,7 @@ class ImageService
             default => throw new Exception('Format d\'image incorrect, vous devez utiliser des fichiers en .jpeg'),
         };
 
-        $path = $this->parameters->get('images_directory') . $directory;
+        $path = $this->parameters->get('images_directory');
 
         if (!file_exists($path . '/tricks/')) {
             mkdir($path . '/tricks/', 0755, true);
