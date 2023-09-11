@@ -28,7 +28,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
             $tricks->setDescription($faker->text());
             $tricks->setSlug($this->slugger->slug(strtolower($tricks->getName())));
             $tricks->setGroupTricks($faker->text(10));
-            $tricks->setUsers($users[mt_rand(0, 9)]);
+            $tricks->setUsers($faker->randomElement($users));
             $manager->persist($tricks);
         }
 
