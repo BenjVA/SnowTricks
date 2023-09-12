@@ -9,13 +9,40 @@
 # Project 6
 
 Building of a community website themed around snowboard tricks using Symfony framework.
-You can add description, pictures, video urls to any snowboard tricks and talk about them with other riders ! 
+You can add description, pictures, video urls to create a wiki-like article and talk about them with other riders ! 
 
 # Getting started
 
 This site is to used in a [WAMP](https://www.wampserver.com/) environement, you can use LAMP or XAMP and adapt the settings needed.
 
-- First fork the repository or download it from this page.
+- First fork the repository or download it from [this](https://github.com/BenjVA/SnowTricks) page.
 - Now download [Composer](https://getcomposer.org/download/) if it's not already on your machine. It will be needed to manage libraries.
 - [Scoop](https://scoop.sh/) is a command line installer for Windows used to install [Node.js](https://nodejs.org/en/download) using the command ```scoop install node.js```, to manage assets.
 - Then in ***.env*** replace line 27 by the DBMS settings you use, and line 39 by the mailer you use. Local mails will not function unless you configure with [Mailhog](https://github.com/mailhog/MailHog) or similar.
+- Install [Symfony CLI](https://symfony.com/download) if you don't have it already installed.
+- Then run this to install all dependencies of the project
+```bash
+composer install
+```
+- Create a new database using the DATABASE_URL in ***.env*** in a terminal with : 
+```bash
+php bin/console doctrine:database:create
+```
+- and run this command to load the initial data fixtures :
+```bash
+php bin/console doctrine:fixtures:load
+```
+- Generate the database schema :
+```bash
+php bin/console doctrine:schema:update --force
+```
+
+### Now you should be ready to launch the symfony server
+Run
+```bash
+symfony server:start
+```
+Open a browser and go to localhost:8000 where the site should be displayed !
+
+#
+Created for the Openclassrooms PHP/Symfony apps developer training.
