@@ -28,14 +28,15 @@ composer install
 ```bash
 php bin/console doctrine:database:create
 ```
-- and run this command to load the initial data fixtures :
-```bash
-php bin/console doctrine:fixtures:load
-```
 - Generate the database schema :
 ```bash
 php bin/console doctrine:schema:update --force
 ```
+- and run this command to load the initial data fixtures :
+```bash
+php bin/console doctrine:fixtures:load
+```
+
 
 ### Now you should be ready to launch the symfony server
 Run
