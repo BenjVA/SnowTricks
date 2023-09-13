@@ -68,7 +68,7 @@ class CommentsController extends AbstractController
     }*/
 
     #[Route('/edit/{id}', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Comments $comments, Request $request, EntityManagerInterface $entityManager, Tricks $tricks): Response
+    public function edit(Comments $comments, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CommentsFormType::class, $comments);
         $form->handleRequest($request);
