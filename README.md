@@ -18,7 +18,7 @@ This site is to used in a [WAMP](https://www.wampserver.com/) environement, you 
 - First fork the repository or download it from [this](https://github.com/BenjVA/SnowTricks) page.
 - Now download [Composer](https://getcomposer.org/download/) if it's not already on your machine. It will be needed to manage libraries.
 - [Scoop](https://scoop.sh/) is a command line installer for Windows used to install [Node.js](https://nodejs.org/en/download) using the command ```scoop install node.js```, to manage assets.
-- Then in ***.env*** replace line 27 by the DBMS settings you use, and line 39 by the mailer you use. Local mails will not function unless you configure with [Mailhog](https://github.com/mailhog/MailHog) or similar.
+- Then in ***.env*** put the DBMS settings you use, and the mailer you prefer to use.
 - Install [Symfony CLI](https://symfony.com/download) if you don't have it already installed.
 - Then run this to install all dependencies of the project
 ```bash
