@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/forgottenpassword', name: 'app_forgotten_password', methods: ['GET'])]
+    #[Route('/forgottenpassword', name: 'app_forgotten_password', methods: ['GET', 'POST'])]
     public function forgottenPassword(Request                $request,
                                       UsersRepository        $usersRepository,
                                       JWTService             $JWTService,
@@ -105,7 +105,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/forgottenpassword/{token}', name: 'app_reset_password', methods: ['GET'])]
+    #[Route('/forgottenpassword/{token}', name: 'app_reset_password', methods: ['GET', 'POST'])]
     public function resetPassword(string                      $token,
                                   Request                     $request,
                                   UsersRepository             $usersRepository,
